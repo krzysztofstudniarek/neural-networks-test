@@ -39,9 +39,9 @@ public class Clusterization3d implements ClusterizationInterface {
 		while ((inputLine = in.readLine()) != null) {
 			String[] tab = inputLine.split(",");
 			double[] tmp = new double[3];
-			tmp[0] = Double.parseDouble(tab[0]);
-			tmp[1] = Double.parseDouble(tab[1]);
-			tmp[2] = Double.parseDouble(tab[2]);
+			tmp[0] = Double.parseDouble(tab[5]);
+			tmp[1] = Double.parseDouble(tab[6]);
+			tmp[2] = Double.parseDouble(tab[7]);
 			points.add(new Vector(tmp));
 
 		}
@@ -68,9 +68,6 @@ public class Clusterization3d implements ClusterizationInterface {
 				data[ind][0] = point.getInputVectorData()[0];
 				data[ind][1] = point.getInputVectorData()[1];
 				data[ind][2] = point.getInputVectorData()[2];
-				System.out.print(point.getInputVectorData()[0] + " : "
-						+ point.getInputVectorData()[1] + " : "
-						+ point.getInputVectorData()[2] + "\n");
 				ind++;
 			}
 
@@ -83,13 +80,13 @@ public class Clusterization3d implements ClusterizationInterface {
 
 			p.addPlot(myPlot);
 
-			for (int i = 0; i < 100; i++) {
+			for (int i = 0; i < 600; i++) {
 				neurons.add(new Neuron(3, 20));
 			}
 
 			Random r = new Random();
 
-			int minId, numOfLearnLoops = 100000;
+			int minId, numOfLearnLoops = 1000000;
 			double lambda = 1;
 
 			for (int j = 0; j < numOfLearnLoops; j++) {

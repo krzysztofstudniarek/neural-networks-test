@@ -14,6 +14,7 @@ import Utils.Vector;
 import com.panayotis.gnuplot.JavaPlot;
 import com.panayotis.gnuplot.plot.DataSetPlot;
 import com.panayotis.gnuplot.style.NamedPlotColor;
+import com.panayotis.gnuplot.style.PlotColor;
 import com.panayotis.gnuplot.style.PlotStyle;
 import com.panayotis.gnuplot.style.Style;
 
@@ -26,7 +27,7 @@ public class Clusterization2d implements ClusterizationInterface {
 	}
 
 	public void readDataFromURL(String URL) throws IOException {
-		
+
 		points = new ArrayList<Vector>();
 
 		URL url = new URL(URL);
@@ -35,7 +36,7 @@ public class Clusterization2d implements ClusterizationInterface {
 		BufferedReader in = new BufferedReader(new InputStreamReader(
 				yc.getInputStream(), "UTF-8"));
 		String inputLine;
-		
+
 		while ((inputLine = in.readLine()) != null) {
 			String[] tab = inputLine.split(",");
 			double[] tmp = new double[2];
@@ -54,33 +55,16 @@ public class Clusterization2d implements ClusterizationInterface {
 			readDataFromURL("http://hydra.ics.p.lodz.pl/data/sc201314/193933");
 
 			ArrayList<Neuron> neurons = new ArrayList<Neuron>();
-			
+
 			JavaPlot p = new JavaPlot();
 
-			double[][] data = new double[points.size()][2];
-
-			for (int i = 0; i < points.size(); i++) {
-				data[i][0] = points.get(i).getInputVectorData()[0];
-				data[i][1] = points.get(i).getInputVectorData()[1];
-			}
-
-			PlotStyle myStyle = new PlotStyle();
-			myStyle.setStyle(Style.POINTS);
-			myStyle.setLineType(NamedPlotColor.BLUE);
-
-			DataSetPlot myPlot = new DataSetPlot(data);
-			myPlot.setPlotStyle(myStyle);
-
-			p.addPlot(myPlot);
-
-			
-			for (int i = 0; i < 100; i++) {
+			for (int i = 0; i < 10; i++) {
 				neurons.add(new Neuron(2, 2));
 			}
 
 			Random r = new Random();
 
-			int minId, numOfLearnLoops = 100000;
+			int minId, numOfLearnLoops = 1000000;
 			double lambda = 1;
 
 			for (int j = 0; j < numOfLearnLoops; j++) {
@@ -105,14 +89,61 @@ public class Clusterization2d implements ClusterizationInterface {
 				lambda -= 1 / numOfLearnLoops;
 			}
 
-			
+			ArrayList<ArrayList<Vector>> outputDatasetsList = new ArrayList<ArrayList<Vector>>();
+			for (int i = 0; i < neurons.size(); i++) {
+
+				ArrayList<Vector> a = new ArrayList<Vector>();
+				a.add(new Vector(neurons.get(i).getWeightsVector()));
+				outputDatasetsList.add(a);
+
+			}
+
+			for (Vector point : points) {
+
+				double min = Double.MAX_VALUE, tmp = min;
+				minId = 0;
+
+				for (int i = 0; i < neurons.size(); i++) {
+					tmp = neurons.get(i).evaluate(point);
+					if (tmp < min) {
+						min = tmp;
+						minId = i;
+					}
+
+				}
+
+				outputDatasetsList.get(minId).add(point);
+
+			}
+
+			Random rand = new Random();
+
+			for (ArrayList<Vector> data : outputDatasetsList) {
+				double[][] d = new double[data.size()][2];
+				
+				for(int i = 0; i<data.size(); i++){
+					d[i][0] = data.get(i).getInputVectorData()[0];
+					d[i][1] = data.get(i).getInputVectorData()[1];
+				}
+				
+				
+				PlotStyle myStyle = new PlotStyle();
+				myStyle.setStyle(Style.POINTS);
+				myStyle.setLineType(NamedPlotColor.values()[rand.nextInt(NamedPlotColor.values().length)]);
+
+				DataSetPlot myPlot = new DataSetPlot(d);
+				myPlot.setPlotStyle(myStyle);
+
+				p.addPlot(myPlot);
+			}
+
 			double[][] data1 = new double[neurons.size()][2];
 
-			for (int i = 0; i < neurons.size(); i++) {
+/*			for (int i = 0; i < neurons.size(); i++) {
 				data1[i][0] = neurons.get(i).getWeightsVector()[0];
 				data1[i][1] = neurons.get(i).getWeightsVector()[1];
 			}
-			
+
 			PlotStyle myStyle1 = new PlotStyle();
 			myStyle1.setStyle(Style.POINTS);
 			myStyle1.setLineType(NamedPlotColor.RED);
@@ -120,10 +151,8 @@ public class Clusterization2d implements ClusterizationInterface {
 			DataSetPlot myPlot1 = new DataSetPlot(data1);
 			myPlot1.setPlotStyle(myStyle1);
 
-			p.addPlot(myPlot1);
-			
-			
-			
+			p.addPlot(myPlot1);*/
+			p.set("key", "off");
 			p.plot();
 
 		} catch (IOException e) {
@@ -131,6 +160,5 @@ public class Clusterization2d implements ClusterizationInterface {
 			e.printStackTrace();
 		}
 	}
-
 
 }

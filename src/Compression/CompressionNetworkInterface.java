@@ -1,5 +1,9 @@
 package Compression;
 
+import Utils.Vector;
+
+
+
 public abstract class CompressionNetworkInterface {
 
 	protected String imagePath;
@@ -7,18 +11,17 @@ public abstract class CompressionNetworkInterface {
 	protected int frameWidth, frameHight, neuronsVectorSize, learningStepSize;
 	
 	public CompressionNetworkInterface(String imagePath, String outputPath, int frameWidth,
-			int frameHight, int neuronsVectorSize, int learningStepSize){
+			int frameHight, int learningStepSize){
 		
 		this.imagePath = imagePath;
 		this.outputPath = outputPath;
 		this.frameWidth = frameWidth;
 		this.frameHight = frameHight;
-		this.neuronsVectorSize = neuronsVectorSize;
 		this.learningStepSize = learningStepSize;
 		
 	}
 	
 	
-	public abstract void compress();
+	public abstract Vector compress(boolean saveToFile, String logFile, double lambda, int neuronsVectorSize);
 
 }
