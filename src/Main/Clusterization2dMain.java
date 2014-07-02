@@ -10,7 +10,7 @@ public class Clusterization2dMain {
 	public static void main(final String[] args) {
 
 		Clusterization2d clust2d = new Clusterization2d();
-		clust2d.clusterize();
+		clust2d.clusterizeNG();
 		
 	}
 	
