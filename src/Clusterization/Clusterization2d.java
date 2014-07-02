@@ -276,4 +276,10 @@ public class Clusterization2d implements ClusterizationInterface {
 		}
 	}
 
+	@Override
+	public void clusterizeKMeans() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

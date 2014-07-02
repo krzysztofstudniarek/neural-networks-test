@@ -112,23 +112,57 @@ public class Clusterization3d implements ClusterizationInterface {
 				lambda -= 1 / numOfLearnLoops;
 			}
 
-			double[][] data1 = new double[neurons.size()][3];
-
+			ArrayList<ArrayList<Vector>> outputDatasetsList = new ArrayList<ArrayList<Vector>>();
 			for (int i = 0; i < neurons.size(); i++) {
-				data1[i][0] = neurons.get(i).getWeightsVector()[0];
-				data1[i][1] = neurons.get(i).getWeightsVector()[1];
-				data1[i][2] = neurons.get(i).getWeightsVector()[2];
+
+				ArrayList<Vector> a = new ArrayList<Vector>();
+				a.add(new Vector(neurons.get(i).getWeightsVector()));
+				outputDatasetsList.add(a);
+
 			}
 
-			PlotStyle myStyle1 = new PlotStyle();
-			myStyle1.setStyle(Style.POINTS);
-			myStyle1.setLineType(NamedPlotColor.RED);
+			for (Vector point : points) {
 
-			DataSetPlot myPlot1 = new DataSetPlot(data1);
-			myPlot1.setPlotStyle(myStyle1);
+				double min = Double.MAX_VALUE, tmp = min;
+				minId = 0;
 
-			p.addPlot(myPlot1);
+				for (int i = 0; i < neurons.size(); i++) {
+					tmp = neurons.get(i).evaluate(point);
+					if (tmp < min) {
+						min = tmp;
+						minId = i;
+					}
 
+				}
+
+				outputDatasetsList.get(minId).add(point);
+
+			}
+
+			Random rand = new Random();
+
+			for (ArrayList<Vector> dat : outputDatasetsList) {
+				double[][] d = new double[dat.size()][3];
+				
+				for(int i = 0; i<dat.size(); i++){
+					d[i][0] = dat.get(i).getInputVectorData()[0];
+					d[i][1] = dat.get(i).getInputVectorData()[1];
+					d[i][2] = dat.get(i).getInputVectorData()[2];
+				}
+				
+				
+				myStyle = new PlotStyle();
+				myStyle.setStyle(Style.POINTS);
+				myStyle.setLineType(NamedPlotColor.values()[rand.nextInt(NamedPlotColor.values().length)]);
+
+				myPlot = new DataSetPlot(d);
+				myPlot.setPlotStyle(myStyle);
+
+				p.addPlot(myPlot);
+			}
+
+			
+			p.set("key", "off");
 			p.plot();
 
 		} catch (IOException e) {
@@ -167,7 +201,7 @@ public class Clusterization3d implements ClusterizationInterface {
 
 			p.addPlot(myPlot);
 
-			for (int i = 0; i < 600; i++) {
+			for (int i = 0; i < 10; i++) {
 				neurons.add(new Neuron(3, 20));
 			}
 
@@ -199,29 +233,69 @@ public class Clusterization3d implements ClusterizationInterface {
 				lambda -= 1 / numOfLearnLoops;
 			}
 
-			double[][] data1 = new double[neurons.size()][3];
-
+			ArrayList<ArrayList<Vector>> outputDatasetsList = new ArrayList<ArrayList<Vector>>();
 			for (int i = 0; i < neurons.size(); i++) {
-				data1[i][0] = neurons.get(i).getWeightsVector()[0];
-				data1[i][1] = neurons.get(i).getWeightsVector()[1];
-				data1[i][2] = neurons.get(i).getWeightsVector()[2];
+
+				ArrayList<Vector> a = new ArrayList<Vector>();
+				a.add(new Vector(neurons.get(i).getWeightsVector()));
+				outputDatasetsList.add(a);
+
 			}
 
-			PlotStyle myStyle1 = new PlotStyle();
-			myStyle1.setStyle(Style.POINTS);
-			myStyle1.setLineType(NamedPlotColor.RED);
+			for (Vector point : points) {
 
-			DataSetPlot myPlot1 = new DataSetPlot(data1);
-			myPlot1.setPlotStyle(myStyle1);
+				double min = Double.MAX_VALUE, tmp = min;
+				minId = 0;
 
-			p.addPlot(myPlot1);
+				for (int i = 0; i < neurons.size(); i++) {
+					tmp = neurons.get(i).evaluate(point);
+					if (tmp < min) {
+						min = tmp;
+						minId = i;
+					}
 
+				}
+
+				outputDatasetsList.get(minId).add(point);
+
+			}
+
+			Random rand = new Random();
+
+			for (ArrayList<Vector> dat : outputDatasetsList) {
+				double[][] d = new double[dat.size()][3];
+				
+				for(int i = 0; i<dat.size(); i++){
+					d[i][0] = dat.get(i).getInputVectorData()[0];
+					d[i][1] = dat.get(i).getInputVectorData()[1];
+					d[i][2] = dat.get(i).getInputVectorData()[2];
+				}
+				
+				
+				myStyle = new PlotStyle();
+				myStyle.setStyle(Style.POINTS);
+				myStyle.setLineType(NamedPlotColor.values()[rand.nextInt(NamedPlotColor.values().length)]);
+
+				myPlot = new DataSetPlot(d);
+				myPlot.setPlotStyle(myStyle);
+
+				p.addPlot(myPlot);
+			}
+
+			
+			p.set("key", "off");
 			p.plot();
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public void clusterizeKMeans() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
