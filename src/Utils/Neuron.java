@@ -13,6 +13,14 @@ import javax.imageio.ImageIO;
 public class Neuron {
 
 	private double[] weights;
+	public double[] getWeights() {
+		return weights;
+	}
+
+	public void setWeights(double[] weights) {
+		this.weights = weights;
+	}
+
 	int width, height;
 
 	public Neuron(int imageWidth, int imageHeight) {
